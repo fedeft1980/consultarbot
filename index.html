@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Consulta Netflix</title>
+
+<style>
+body{
+  font-family:Arial;
+
+  /* FONDO CON LOGO */
+  background:
+    linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),
+    logo.png");
+  
+  background-size:300px;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-attachment:fixed;
+
+  color:#fff;
+  text-align:center;
+  padding:50px;
+}
+
+input,button{
+  padding:12px;
+  width:260px;
+  margin:5px;
+  border-radius:5px;
+  border:0;
+}
+
+button{
+  background:red;
+  color:white;
+  cursor:pointer;
+}
+
+#resultado{
+  margin-top:20px;
+  font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Buscar Dirección</h2>
+
+<input type="email" id="correo" placeholder="Correo Netflix">
+<br>
+<button onclick="buscar()">Buscar</button>
+
+<div id="resultado"></div>
+
+<script>
+const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTOd_2hd8vS1RdokXoTNzxgrDpgAkeYwzxEX4z9y9cQEIc3VcjmneQj5Aeb4ssG--SXG7q6hrmuPa-H/pub?output=csv";
+
+function buscar(){
+
+  let mail = document.getElementById("correo").value.trim().toLowerCase();
+
+  if(mail===""){
+    alert("Ingresá un correo");
+    return;
+  }
+
+  fetch(url)
+  .then(r=>r.text())
+  .then(data=>{
+
+    let filas = data.split("\n");
+
+    for(let f of filas){
+
+      let col = f.split(",");
+
+      if(col[0].toLowerCase() === mail){
+
+        let resultado = col[1].trim();
+
+        let html = `
+          <p><b>Correo asignado:</b><br>${resultado}</p>
+
+          <hr>
+
+          <p>
+          👉 Copiá el correo resultado<br>
+          👉 Ingresá a <a href="https://yopmail.com" target="_blank">yopmail.com</a><br>
+          👉 Pegalo y hacé click en la flecha
+          </p>
+
+          <p>
+          <a href="https://yopmail.com" target="_blank"
+             style="color:#00ff99;font-weight:bold">
+             🔗 Abrir Yopmail
+          </a>
+          </p>
+        `;
+
+        if(resultado === "bruffamohobeu-6069@yopmail.com"){
+
+          html += `
+            <hr>
+            <p style="color:#00ff99">
+            ✅ Para cliente final:<br>
+            Ingresá a:<br>
+            <a href="https://tucodigoencasa.com" target="_blank">
+            https://tucodigoencasa.com
+            </a><br>
+            Pegá el correo y recibís el código
+            </p>
+          `;
+        }
+
+        document.getElementById("resultado").innerHTML = html;
+        return;
+      }
+    }
+
+    document.getElementById("resultado").innerText =
+    "No encontrado";
+
+  });
+}
+</script>
+
+</body>
+</html>
